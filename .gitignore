@@ -1,0 +1,2 @@
+# Exclude Parameter File for az deployment usage
+*.parameters.json
