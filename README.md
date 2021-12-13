@@ -1,17 +1,15 @@
 # Azure DNS Resolver Sample
 
 ## TL,DR
-This repository can be used to deploy a sample of a highly available DNS resolver that is capable of resolving public IP addresses of private endpoint enabled resources that are not connected to or configured in your corporate network. This is to overcome the behavior described in [https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns):
+This repository can be used to deploy a sample of a special highly available DNS resolver. It is capable of resolving public IP addresses of private endpoint enabled resources that are *not connected to* or *configured* in your corporate network. This is to overcome the behavior described in [https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns):
 > Private networks already using the private DNS zone for a given type, can only connect to public resources if they don't have any private endpoint connections, otherwise a corresponding DNS configuration is required on the private DNS zone in order to complete the DNS resolution sequence. 
 
-<br>
-
 ## Deployment
-There are multiple Options to deploy this Sample.
+There are two options to deploy this sample.
 
 ### Option 1 - Use "Deploy to Azure" Button
 
-You can use this "Deploy to Azure" butten to create the Sample environment in your subscription:
+You can use this "Deploy to Azure" button to create the Sample environment in your subscription:
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcthoenes%2Fazure-coredns-forwarder-poc%2Freleases%2Flatest%2Fdownload%2Fmain.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
@@ -20,9 +18,9 @@ You can use this "Deploy to Azure" butten to create the Sample environment in yo
 <br>
 
 ### Option 2 - Use Azure CLI
-You can deploy the Sample using a Azure CLI deployment to your subscription
+You can deploy the sample using a Azure CLI deployment to your subscription
 
-To Do so please clone the repository and create a parameter file for your deployment looking similar to this example:
+To do so please clone the repository and create a parameter file for your deployment looking similar to this example:
 
 ```json
 {
@@ -56,7 +54,7 @@ To Do so please clone the repository and create a parameter file for your deploy
     }
   }
 ````
-Afterward you can use AZ CLI to deploy to your Subscription. Make sure you are logged on and the correct subscription is set.
+Afterwards, you can use AZ CLI to deploy it to your Azure subscription. Make sure you are logged on and the correct subscription is set.
 
 ```shell
 az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @parameterFile.json
@@ -68,25 +66,25 @@ az deployment sub create --location <yourPreferredLocation> --template-file ./ia
 
 If you deploy this sample you will get multiple resources:
 
-- a Azure Virtual Network to host the required resources
+- an Azure Virtual Network to host the required resources
 - a Virtual Machine Scale Set to host the DNS Servers
-- a internal Lodbalancer to distribute DNS taffic to the corresponding hosts in the Virtual Machine Scale Set
+- an internal Load Balancer to distribute DNS traffic to the corresponding hosts in the Virtual Machine Scale Set
 - a NAT Gateway for the DNS Servers to be able to connect to the Internet
-- a Virtual Machine in a different Subnet to be able to test the configuration
+- a Virtual Machine in a different subnet to be able to test the configuration
 - a private DNS Zone linked to the virtual network
-- a storage Account with the blob subresouce being private Endpoint enabled but NOT integrated in the private DNS Zone
-- a Azure Bastion to connect to the resolver VM
+- a storage Account with the blob sub-resource being private endpoint enabled but **NOT** integrated in the private DNS Zone
+- an Azure Bastion to connect to the resolver VM
 
 ## Tests after Deployment
 
 1. Connect to your resolver vm using Azure Bastion
 
-2. From the Console start nslookup by typing:
+2. From the Console start `nslookup` by typing:
 ```shell
 nslookup
 ```
 
-3. In nslookup type the name of the created Storage Account. Make sure you try to access the blob endpoint as this is the only private endpoint enabled subresources in this sample.
+3. In `nslookup` type the name of the created Storage Account. Make sure you try to access the blob endpoint as this is the only private endpoint enabled sub-resource in this sample.
 ```shell
 > storageaccount.blob.core.windows.net
 Server:127.0.0.53
@@ -111,7 +109,7 @@ storageaccount.blob.core.windows.net canonical name = storageaccount.privatelink
 ```
 - Now DNS resolution directly points to the Azure DNS Service. Requesting the blob endpoint will result in an NXDOMAIN.
 
-5. Now point the DNS server to a public DNS Server to verify that the public DNS is capable of resolving to the storage accounts Public IP address:
+5. Now point the DNS server to a public DNS server to verify that the public DNS is capable of resolving to the storage accounts Public IP address:
 ```shell
 > server 1.1.1.1 
 Default server: 1.1.1.1
@@ -128,7 +126,7 @@ Address: <PublicIP>
 ````
 - The public DNS Server points to the Public IP address as expected.
 
-6. As a last Test use the newly created Virtual Machine Scale Set running coredns. Therefore set the server to 10.0.0.200 (Loadbalancer IP) and resolve the endpoint again:
+6. As a last Test use the newly created Virtual Machine Scale Set running `coredns`. Therefore set the server to 10.0.0.200 (Loadbalancer IP) and resolve the endpoint again:
 ```shell
 > server 10.0.0.200
 Default server: 10.0.0.200
@@ -149,4 +147,4 @@ Name:blob.<publicname>.store.core.windows.net
 Address: <PublicIP>
 ```
 
-- As configured the coredns server will use a alternate public DNS Server if the result of the forward is a NXDOMAIN. If the firewall setting on the storage account allow access it is possible to use the Public IP even though it is not configured in the Private DNS Zone.
+- As configured the `coredns` server will use a alternate public DNS Server if the result of the forward is a NXDOMAIN. If the firewall setting on the storage account allow access it is possible to use the Public IP even though it is not configured in the Private DNS Zone.
