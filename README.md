@@ -62,9 +62,24 @@ Afterward you can use AZ CLI to deploy to your Subscription. Make sure you are l
 az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @parameterFile.json
 ```
 
+## Sample Environment Description
+
+![SampleEnvironment](docs/sampleenvironment.png)
+
+If you deploy this sample you will get multiple resources:
+
+- a Azure Virtual Network to host the required resources
+- a Virtual Machine Scale Set to host the DNS Servers
+- a internal Lodbalancer to distribute DNS taffic to the corresponding hosts in the Virtual Machine Scale Set
+- a NAT Gateway for the DNS Servers to be able to connect to the Internet
+- a Virtual Machine in a different Subnet to be able to test the configuration
+- a private DNS Zone linked to the virtual network
+- a storage Account with the blob subresouce being private Endpoint enabled but NOT integrated in the private DNS Zone
+- a Azure Bastion to connect to the resolver VM
+
 ## Tests after Deployment
 
-1. Connect to your resolver vm using Azure Bation
+1. Connect to your resolver vm using Azure Bastion
 
 2. From the Console start nslookup by typing:
 ```shell

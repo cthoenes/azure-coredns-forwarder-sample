@@ -1,0 +1,62 @@
+<mxfile host="65bd71144e">
+    <diagram id="rPlL6uPj8M9DHyxAQx_P" name="Page-1">
+        <mxGraphModel dx="1812" dy="710" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="4" value="TCP 53&lt;br&gt;UDP 53&lt;br&gt;Probe 8181" style="endArrow=classic;labelBackgroundColor=none;html=1;verticalAlign=top;" edge="1" parent="1" source="3" target="2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="390" y="550" as="sourcePoint"/>
+                        <mxPoint x="440" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="2" value="vmss-dns" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/VM_Scale_Set.svg;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="420" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Internal IP&lt;br&gt;10.0.0.200" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Load_Balancer_feature.svg;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="420" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="vm-resolver" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/VM_Linux.svg;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="422" width="50" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="" style="endArrow=classic;html=1;" edge="1" parent="1" source="5" target="3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="450" y="490" as="sourcePoint"/>
+                        <mxPoint x="500" y="440" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="7" value="Private DNS Zone&lt;br&gt;privatelink.blob.core.windows.net" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/DNS_Private_Zones.svg;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="300" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Public DNS" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/DNS.svg;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="300" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="use alternate when&amp;nbsp;&lt;br&gt;NXDOMAIN" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;labelBackgroundColor=none;verticalAlign=bottom;" edge="1" parent="1" source="2" target="8">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="450" y="490" as="sourcePoint"/>
+                        <mxPoint x="500" y="440" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="565" y="400"/>
+                            <mxPoint x="375" y="400"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="" style="endArrow=classic;html=1;" edge="1" parent="1" source="2" target="7">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="450" y="480" as="sourcePoint"/>
+                        <mxPoint x="500" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" value="Azure Bastion" style="shape=image;verticalLabelPosition=top;labelBackgroundColor=none;verticalAlign=bottom;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwLjIxMjc0NTYzNjcwMTU4Mzg2IDAuMDA3NTA5MTEyMzU4MDkzMjYyIDQ5LjY2MTc5Mjc1NTEyNjk1IDUwLjAwNjEwNzMzMDMyMjI2NiIgY2xhc3M9IiIgcm9sZT0icHJlc2VudGF0aW9uIiBmb2N1c2FibGU9ImZhbHNlIiBpZD0iRnhTeW1ib2wwLTBhZiIgZGF0YS10eXBlPSIxIiB3aWR0aD0iNDkuNjYxNzkyNzU1MTI2OTUiIGhlaWdodD0iNTAuMDA2MTA3MzMwMzIyMjY2Ij48Zz48dGl0bGUvPjxwYXRoIGQ9Ik0yMi4zIDM3LjNDMTUuOCA0MS44IDUuNCA0OC43IDQuNCA0OS41Yy0xLjMuOS0zLjIuNS0zLjgtLjMtLjYtLjktLjYtMi44LjctMy43LjgtLjUgMTQuNS05LjggMTguNy0xMi43bDIuNCAyLjZjMS4xIDEuMS0uMSAxLjktLjEgMS45ek0yMiAzMVMxMCAxOC4xIDguNiAxNi43Yy0xLjMtMS41LS4xLTMuMi42LTMuOC43LS42IDIuOC0xLjUgMy45LS40UzI3LjYgMjggMjguNiAyOS4xcy45IDIuOC0uOCA0Yy0uMy4yLTEuMS44LTIuMyAxLjYtLjEuMS0uNi41LTEuMS44IDAgMCAxLjEtLjguMy0xLjdMMjIgMzF6bTguNi04LjVjNS40IDUuOCAxMy44IDE0LjkgMTQuNyAxNS44IDEuMSAxLjIgMyAxLjIgMy44LjVzMS4yLTIuNS4xLTMuN2MtLjYtLjctMTEuOS0xMi44LTE1LjMtMTYuNWwtMi45IDJjLTEuNC44LS40IDEuOS0uNCAxLjl6bTEuMi01LjlTNDYuMyA2LjUgNDcuOSA1LjNzLjgtMy4xLjItMy44UzQ1LjctLjYgNDQuNC4zIDI3IDEyLjQgMjUuOCAxMy4zcy0xLjUgMi41IDAgNC4xYy4yLjMuOSAxIDEuOSAyLjEuMS4xLjUuNi45IDEgMCAwLS45LTEgLjEtMS43bDMuMS0yLjJ6IiBjbGFzcz0ibXNwb3J0YWxmeC1zdmctYzE5IiBmaWxsPSIjMDA3MmM2Ii8+PC9nPjxkZWZzPgo8L2RlZnM+Cjwvc3ZnPg==;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="300" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="endArrow=classic;html=1;labelBackgroundColor=none;" edge="1" parent="1" source="11" target="5">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="450" y="480" as="sourcePoint"/>
+                        <mxPoint x="500" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
