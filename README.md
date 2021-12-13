@@ -61,3 +61,77 @@ Afterward you can use AZ CLI to deploy to your Subscription. Make sure you are l
 ```shell
 az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @parameterFile.json
 ```
+
+## Tests after Deployment
+
+1. Connect to your resolver vm using Azure Bation
+
+2. From the Console start nslookup by typing:
+```shell
+nslookup
+```
+
+3. In nslookup type the name of the created Storage Account. Make sure you try to access the blob endpoint as this is the only private endpoint enabled subresources in this sample.
+```shell
+> storageaccount.blob.core.windows.net
+Server:127.0.0.53
+Address:127.0.0.53#53
+
+** server can't find storageaccount.blob.core.windows.net: NXDOMAIN
+```
+- Ubuntu will refer to 127.0.0.1 as DNS Server and return no result for the query as it uses the Azure provided DNS in the background. The query will result in an NXDOMAIN.
+
+4. To verify that the Azure DNS is not capable of resolving the name due to a missing entry in the Private DNS Zone type:
+```shell
+> server 168.63.129.16
+Default server: 168.63.129.16
+Address: 168.63.129.16#53
+> storageaccount.blob.core.windows.net
+Server:168.63.129.16
+Address:168.63.129.16#53
+
+Non-authoritative answer:
+storageaccount.blob.core.windows.net canonical name = storageaccount.privatelink.blob.core.windows.net.
+** server can't find storageaccount.privatelink.blob.core.windows.net: NXDOMAIN
+```
+- Now DNS resolution directly points to the Azure DNS Service. Requesting the blob endpoint will result in an NXDOMAIN.
+
+5. Now point the DNS server to a public DNS Server to verify that the public DNS is capable of resolving to the storage accounts Public IP address:
+```shell
+> server 1.1.1.1 
+Default server: 1.1.1.1
+Address: 1.1.1.1#53
+> storageaccount.blob.core.windows.net
+Server:1.1.1.1
+Address:1.1.1.1#53
+
+Non-authoritative answer:
+storageaccount.blob.core.windows.net canonical name = storageaccount.privatelink.blob.core.windows.net.
+storageaccount.privatelink.blob.core.windows.net canonical name = blob.<publicname>.store.core.windows.net.
+Name:blob.<publicname>.store.core.windows.net
+Address: <PublicIP>
+````
+- The public DNS Server points to the Public IP address as expected.
+
+6. As a last Test use the newly created Virtual Machine Scale Set running coredns. Therefore set the server to 10.0.0.200 (Loadbalancer IP) and resolve the endpoint again:
+```shell
+> server 10.0.0.200
+Default server: 10.0.0.200
+Address: 10.0.0.200#53
+> storageaccount.blob.core.windows.net
+Server:10.0.0.200
+Address:10.0.0.200#53
+
+Non-authoritative answer:
+storageaccount.blob.core.windows.net canonical name = storageaccount.privatelink.blob.core.windows.net.
+storageaccount.privatelink.blob.core.windows.net canonical name = blob.<publicname>.store.core.windows.net.
+> blob.<publicname>.store.core.windows.net.
+Server:10.0.0.200
+Address:10.0.0.200#53
+
+Non-authoritative answer:
+Name:blob.<publicname>.store.core.windows.net
+Address: <PublicIP>
+```
+
+- As configured the coredns server will use a alternate public DNS Server if the result of the forward is a NXDOMAIN. If the firewall setting on the storage account allow access it is possible to use the Public IP even though it is not configured in the Private DNS Zone.
