@@ -1,7 +1,7 @@
 # Azure DNS Resolver Sample
 
 ## TL,DR
-This repository can be used to deploy a sample of a highly available DNS resolver that is capable of resolving public IP addresses of private endpoint enabled resources that are not connected to corpnet. This is to overcome the behavior described in [https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns):
+This repository can be used to deploy a sample of a highly available DNS resolver that is capable of resolving public IP addresses of private endpoint enabled resources that are not connected to or configured in your corporate network. This is to overcome the behavior described in [https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns):
 > Private networks already using the private DNS zone for a given type, can only connect to public resources if they don't have any private endpoint connections, otherwise a corresponding DNS configuration is required on the private DNS zone in order to complete the DNS resolution sequence. 
 
 <br>
