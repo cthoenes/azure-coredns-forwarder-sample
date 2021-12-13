@@ -1,0 +1,40 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+write_files:
+  - owner: root:root
+    path: /etc/systemd/system/coredns.service
+    content: | 
+        [Unit]
+        Description=CoreDNS DNS server
+        Documentation=https://coredns.io
+        After=network.target
+        [Service]
+        PermissionsStartOnly=true
+        LimitNOFILE=1048576
+        LimitNPROC=512
+        CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+        AmbientCapabilities=CAP_NET_BIND_SERVICE
+        NoNewPrivileges=true
+        User=azureuser
+        WorkingDirectory=~
+        ExecStart=/usr/bin/coredns -conf=/etc/coredns/Corefile
+        ExecReload=/bin/kill -SIGUSR1 $MAINPID
+        Restart=on-failure
+        [Install]
+        WantedBy=multi-user.target
+  - owner: azureuser:azureuser
+    path: /etc/coredns/Corefile
+    content: |
+        .:53 {
+            ready
+            forward . 168.63.129.16
+            alternate NXDOMAIN . 1.1.1.1
+            log
+        }
+runcmd:
+  - wget "https://github.com/cthoenes/azure-coredns-forwarder-poc/releases/latest/download/coredns" -O coredns
+  - chmod +x coredns
+  - mv coredns /usr/bin
+  - systemctl start coredns
+  - systemctl enable coredns
