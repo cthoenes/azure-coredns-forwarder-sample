@@ -60,7 +60,7 @@ jobs:
           # An optional flag which indicates if artifact read or upload errors should fail the build.
           artifactErrorsFailBuild: true 
           # An optional set of paths representing artifacts to upload to the release. This may be a single path or a comma delimited list of paths (or globs)
-          artifacts: ./coredns/coredns, ./iac/main.json
+          artifacts: ./coredns/coredns, ./iac/main.json, ./LICENSE
           # An optional body file for the release. This should be the path to the file
           bodyFile: './release/releasebody.md' # optional, default is 
           # Indicates if release notes should be automatically generated.
