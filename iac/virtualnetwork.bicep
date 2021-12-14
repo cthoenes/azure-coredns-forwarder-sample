@@ -35,7 +35,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2021-03-01' = {
   }
 }
 
-@description('Virtual network for PoC environment')
+@description('Virtual network for sample environment')
 resource vnet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   name: vnetname
   location: location

@@ -1,9 +1,9 @@
 targetScope = 'subscription'
 
-@description('Name for the Resource Group to deploy the PoC')
+@description('Name for the Resource Group to deploy the sample')
 param rgName string 
 
-@description('Location for the PoC Resources')
+@description('Location for the sample Resources')
 param location string 
 
 @description('Adminusername for all VMs')
@@ -29,7 +29,7 @@ resource dnsrg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-@description('Module to deploy virtual network for the PoC environment')
+@description('Module to deploy virtual network for the sample environment')
 module vnet 'virtualnetwork.bicep' = {
   scope: dnsrg
   name: 'VirtualNetworkDeployment'

@@ -33,7 +33,7 @@ write_files:
             log
         }
 runcmd:
-  - wget "https://github.com/cthoenes/azure-coredns-forwarder-poc/releases/latest/download/coredns" -O coredns
+  - wget "https://github.com/cthoenes/azure-coredns-forwarder-sample/releases/latest/download/coredns" -O coredns
   - chmod +x coredns
   - mv coredns /usr/bin
   - systemctl start coredns
