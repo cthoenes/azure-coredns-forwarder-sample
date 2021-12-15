@@ -56,7 +56,7 @@ resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
     capacity: instanceCount
   }
   properties: {
-    overprovision: true
+    overprovision: false
     upgradePolicy: {
       mode: 'Automatic'
     }

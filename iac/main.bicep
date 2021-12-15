@@ -24,22 +24,58 @@ param deployPrivateZone bool = true
 @description('Decide if the Storage Account needs to be deployed')
 param deployStorageAccount bool = true
 
+@description('SubnetId for DNS Server if you want to use a prexisting network.')
+param dnsServerSubnetId string = ''
+
+@description('SubnetId for DNS Server if you want to use a prexisting network.')
+param resolverSubnetId string = ''
+
+@description('SubnetId for DNS Server if you want to use a prexisting network.')
+param bastionSubnetId string = ''
+
+@description('The frontend IP for the internal loadbalancer if using a prexisting network.')
+param loadBalancerFrontendIp string = ''
+
+@description('The frontend IP for the internal loadbalancer if using a prexisting network.')
+param vnetId string = ''
+
+var deployVirtualNetworkVariable = ((!empty(dnsServerSubnetId)) ? false : true)
+
+@description('If subnet id is provieded take it. If not use the one created.')
+var dnsServerSubnetIdVariable = ((!empty(dnsServerSubnetId)) ? dnsServerSubnetId : vnet.outputs.snetDNSServerId)
+
+@description('If subnet id is provieded take it. If not use the one created.')
+var resolverSubnetIdVariable = ((!empty(resolverSubnetId)) ? resolverSubnetId : vnet.outputs.snetResolverId)
+
+@description('If subnet id is provieded take it. If not use the one created.')
+var bastionSubnetIdVariable = ((!empty(bastionSubnetId)) ? bastionSubnetId : vnet.outputs.snetBastionId)
+
+@description('Loadbalancer Frontend IP')
+var loadBalancerFrontendIpVariable = ((!empty(loadBalancerFrontendIp)) ? loadBalancerFrontendIp : '10.0.0.200')
+
+@description('Virtual Network')
+var vnetIdVariable = ((!empty(vnetId)) ? vnetId : vnet.outputs.vnet)
+
+@description('Varaiable for NAT Gateway to resolve dependecy')
+var natGwVariable = ((deployVirtualNetworkVariable) ? natgw.outputs.natgw : '')
+
+@description('')
 resource dnsrg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: rgName
   location: location
 }
 
 @description('Module to deploy virtual network for the sample environment')
-module vnet 'virtualnetwork.bicep' = {
+module vnet 'virtualnetwork.bicep' = if (deployVirtualNetworkVariable) {
   scope: dnsrg
   name: 'VirtualNetworkDeployment'
   params: {
-    natgateway: natgw.outputs.natgw
+    natgateway: natGwVariable
   }
 }
 
 @description('Module to deploy NAT Gateway for the DNS Servers')
-module natgw 'natgateway.bicep' = {
+module natgw 'natgateway.bicep' = if (deployVirtualNetworkVariable) {
   scope: dnsrg
   name: 'NATGatewayDeployment'
 }
@@ -49,7 +85,8 @@ module loadbalancer 'loadbalancer.bicep' = {
   scope: dnsrg
   name: 'LoadbalancerDeployment'
   params: {
-    subnetId: vnet.outputs.snetDNSServerId
+    subnetId: dnsServerSubnetIdVariable
+    lbInternalIP: loadBalancerFrontendIpVariable
   }
 }
 
@@ -60,7 +97,7 @@ module dnsvmss 'dnsvmss.bicep' = {
   params: {
     adminUser: adminUser
     adminPasswordOrKey: publicKey
-    subnetId: vnet.outputs.snetDNSServerId
+    subnetId: dnsServerSubnetIdVariable
     lbBackendId: loadbalancer.outputs.lbBackend
   }
 }
@@ -72,7 +109,7 @@ module resolvervm 'resolver.bicep' = if (deployResolver) {
   params: {
     adminUser: adminUser
     adminPasswordOrKey: publicKey
-    subnetId: vnet.outputs.snetResolverId
+    subnetId: resolverSubnetIdVariable
   }
 }
 
@@ -81,7 +118,7 @@ module bastion 'bastion.bicep' = if (deployBastion) {
   scope: dnsrg
   name: 'BastionDeployment'
   params: {
-    subnetId: vnet.outputs.snetBastionId
+    subnetId: bastionSubnetIdVariable
   }
 }
 
@@ -90,7 +127,7 @@ module privatezone 'privatednszone.bicep'  = if (deployPrivateZone) {
   scope: dnsrg
   name: 'PrivateDNSZoneDeployment'
   params: {
-    vnetId: vnet.outputs.vnet
+    vnetId: vnetIdVariable
   }
 }
 
@@ -99,6 +136,6 @@ module storage 'storageaccount.bicep' = if (deployStorageAccount) {
   scope: dnsrg
   name: 'StorageDeployment'
   params: {
-    subnetId: vnet.outputs.snetResolverId
+    subnetId: resolverSubnetIdVariable
   }
 }
