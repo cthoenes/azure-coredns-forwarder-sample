@@ -15,12 +15,6 @@ param authenticationType string = 'sshPublicKey'
 @secure()
 param adminPasswordOrKey string
 
-@description('The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version.')
-@allowed([
-  '18.04-LTS'
-])
-param ubuntuOSVersion string = '18.04-LTS'
-
 @description('The size of the VM')
 param vmSize string = 'Standard_B2s'
 
@@ -84,9 +78,9 @@ resource resolvervm 'Microsoft.Compute/virtualMachines@2021-07-01' = {
         }
       }
       imageReference: {
-        publisher: 'Canonical'
-        offer: 'UbuntuServer'
-        sku: ubuntuOSVersion
+        publisher: 'canonical'
+        offer: '0001-com-ubuntu-server-focal'
+        sku: '20_04-lts-gen2'
         version: 'latest'
       }
     }

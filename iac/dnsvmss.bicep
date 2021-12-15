@@ -67,9 +67,9 @@ resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
           caching: 'ReadWrite'
         }
         imageReference: {
-          publisher: 'Debian'
-          offer: 'debian-11'
-          sku: '11-gen2'
+          publisher: 'canonical'
+          offer: '0001-com-ubuntu-server-focal'
+          sku: '20_04-lts-gen2'
           version: 'latest'
         }
       }
