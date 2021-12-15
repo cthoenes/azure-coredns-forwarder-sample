@@ -5,7 +5,7 @@ param lbName string = 'lb-dns'
 param subnetId string
 
 @description('Static internal IP for Load Balancer Frontend')
-param lbInternalIP string = '10.0.0.200'
+param lbInternalIP string
 
 @description('Location variable')
 var location = resourceGroup().location
