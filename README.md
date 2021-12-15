@@ -7,9 +7,9 @@ This repository can be used to deploy a sample of a special highly available DNS
 ## Deployment
 There are two options to deploy this sample.
 
-### Option 1 - Use "Deploy to Azure" Button
+### *Option 1 - Use "Deploy to Azure" Button (Currently not active)*
 
-You can use this "Deploy to Azure" button to create the Sample environment in your subscription:
+*You can use this "Deploy to Azure" button to create the Sample environment in your subscription:*
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcthoenes%2Fazure-coredns-forwarder-sample%2Freleases%2Flatest%2Fdownload%2Fmain.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
