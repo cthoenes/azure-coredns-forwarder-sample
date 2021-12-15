@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "rgName": {
+        "value": "<resourceGroupName>"
+      },
+      "location": {
+        "value": "<yourPreferredLocation>"
+      },
+      "adminUser": {
+        "value": "azureuser"
+      },
+      "publicKey": {
+        "value": "<sshPublicKey>"
+      },
+      "deployBastion": {
+        "value": true
+      },
+      "deployResolver": {
+        "value": true
+      },
+      "deployPrivateZone": {
+        "value": true
+      },
+      "deployStorageAccount": {
+        "value": true
+      }
+    }
+  }

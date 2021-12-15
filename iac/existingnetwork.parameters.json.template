@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "rgName": {
+        "value": "<resourceGroupName>"
+      },
+      "location": {
+        "value": "<yourPreferredLocation>"
+      },
+      "adminUser": {
+        "value": "azureuser"
+      },
+      "publicKey": {
+        "value": "<sshPublicKey>"
+      },
+      "dnsServerSubnetId": {
+        "value": "<subnetResourceId>"
+      },
+      "resolverSubnetId": {
+        "value": "<subnetResourceId>"
+      },
+      "bastionSubnetId": {
+        "value": "<AzureBastionSubnetId>"
+      },
+      "vnetId": {
+        "value": "<virtualNetworkId>"
+      },
+      "loadBalancerFrontendIp": {
+        "value": "<frontendIpDNSLoadbalancer>"
+      },
+      "deployBastion": {
+        "value": false
+      },
+      "deployResolver": {
+        "value": false
+      },
+      "deployPrivateZone": {
+        "value": false
+      },
+      "deployStorageAccount": {
+        "value": false
+      }
+    }
+  }
