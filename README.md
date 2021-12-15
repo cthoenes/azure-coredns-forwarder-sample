@@ -11,7 +11,7 @@ There are two options to deploy this sample.
 
 You can use this "Deploy to Azure" button to create the Sample environment in your subscription:
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcthoenes%2Fazure-coredns-forwarder-poc%2Freleases%2Flatest%2Fdownload%2Fmain.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcthoenes%2Fazure-coredns-forwarder-sample%2Freleases%2Flatest%2Fdownload%2Fmain.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
