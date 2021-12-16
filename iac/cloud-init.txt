@@ -3,6 +3,20 @@ package_update: true
 package_upgrade: true
 write_files:
   - owner: root:root
+    path: /etc/systemd/resolved.conf
+    content: | 
+        [Resolve]
+        DNS=127.0.0.1
+        #FallbackDNS=
+        #Domains=
+        #LLMNR=no
+        #MulticastDNS=no
+        #DNSSEC=no
+        #DNSOverTLS=no
+        #Cache=no-negative
+        DNSStubListener=no
+        #ReadEtcHosts=yes
+  - owner: root:root
     path: /etc/systemd/system/coredns.service
     content: | 
         [Unit]
@@ -33,6 +47,8 @@ write_files:
             log
         }
 runcmd:
+  - ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+  - systemctl stop systemd-resolved
   - wget "https://github.com/cthoenes/azure-coredns-forwarder-sample/releases/latest/download/coredns" -O coredns
   - chmod +x coredns
   - mv coredns /usr/bin
