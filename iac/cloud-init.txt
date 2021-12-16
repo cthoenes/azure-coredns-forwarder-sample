@@ -35,6 +35,7 @@ write_files:
         ExecStart=/usr/bin/coredns -conf=/etc/coredns/Corefile
         ExecReload=/bin/kill -SIGUSR1 $MAINPID
         Restart=on-failure
+        SyslogFacility=local5
         [Install]
         WantedBy=multi-user.target
   - owner: azureuser:azureuser
