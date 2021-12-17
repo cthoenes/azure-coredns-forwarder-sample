@@ -1,5 +1,7 @@
 # Azure DNS Resolver Sample
 
+This sample is still work in progress. Expect significant changes.
+
 ## TL,DR
 This repository can be used to deploy a sample of a special highly available DNS resolver. It is capable of resolving public IP addresses of private endpoint enabled resources that are *not connected to* or *configured* in your corporate network. This is to overcome the behavior described in [https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns):
 > Private networks already using the private DNS zone for a given type, can only connect to public resources if they don't have any private endpoint connections, otherwise a corresponding DNS configuration is required on the private DNS zone in order to complete the DNS resolution sequence. 
@@ -7,58 +9,30 @@ This repository can be used to deploy a sample of a special highly available DNS
 ## Deployment
 There are two options to deploy this sample.
 
-### *Option 1 - Use "Deploy to Azure" Button (Currently not active)*
-
-*You can use this "Deploy to Azure" button to create the Sample environment in your subscription:*
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcthoenes%2Fazure-coredns-forwarder-sample%2Freleases%2Flatest%2Fdownload%2Fmain.json" target="_blank">
-    <img src="https://aka.ms/deploytoazurebutton"/>
-</a>
-
-<br>
-
-### Option 2 - Use Azure CLI
+### Option 1 - Use Azure CLI
 You can deploy the sample using a Azure CLI deployment to your subscription
 
-To do so please clone the repository and create a parameter file for your deployment looking similar to this example:
+To do so please clone the repository and rename a parameter file for your deployment. There are 2 template files as examples for different deployment options in the repository:
 
-```json
-{
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "rgName": {
-        "value": "<resourceGroupName>"
-      },
-      "location": {
-        "value": "<yourPreferredLocation>"
-      },
-      "adminUser": {
-        "value": "azureuser"
-      },
-      "publicKey": {
-        "value": "<sshPublicKey>"
-      },
-      "deployBastion": {
-        "value": true
-      },
-      "deployResolver": {
-        "value": true
-      },
-      "deployPrivateZone": {
-        "value": true
-      },
-      "deployStorageAccount": {
-        "value": true
-      }
-    }
-  }
-````
+[fullsample.parameters.json.template](/iac/fullsample.parameters.json.template)  
+Will deploy the full sample with virtual network.  
+
+[existingnetwork.parameters.json.template](/iac/existingnetwork.parameters.json.template)  
+Will deploy the sample using existing resources in you environment.
+
+
 Afterwards, you can use AZ CLI to deploy it to your Azure subscription. Make sure you are logged on and the correct subscription is set.
 
 ```shell
-az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @parameterFile.json
+az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @yourFile.parameters.json
 ```
+
+### Option 2 - Use main.json from release to create custom deployment in the Azure Portal
+
+You can use the main.json in the current release to create a custom deployment from the Azure Portal as outlined in:
+[https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template)
+
+<br>
 
 ## Sample Environment Description
 
@@ -74,6 +48,7 @@ If you deploy this sample you will get multiple resources:
 - a private DNS Zone linked to the virtual network
 - a storage Account with the blob sub-resource being private endpoint enabled but **NOT** integrated in the private DNS Zone
 - an Azure Bastion to connect to the resolver VM
+- a Log Analytice Workspace configured to gather syslog data of the coredns service
 
 ## Tests after Deployment
 
