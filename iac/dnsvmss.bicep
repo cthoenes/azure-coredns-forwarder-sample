@@ -27,6 +27,14 @@ param authenticationType string = 'sshPublicKey'
 @secure()
 param adminPasswordOrKey string
 
+param laWorkspaceResourceId string
+
+@description('Log Analytice Workspace ID')
+param laWorkspaceId string
+
+@description('Get Key for LogAnalytics Workspace')
+var laWorkspaceKey = listKeys(laWorkspaceResourceId,'2020-08-01').primarySharedKey
+
 @description('Name for the Network Interface')
 var nicname = 'nic-${vmssName}'
 
@@ -45,6 +53,12 @@ var linuxConfiguration = {
     ]
   }
 }
+
+@description('Name for the Log Analytics Extension')
+var extensionNameLogAnalytics = 'LogAnalyticsExtension'
+
+@description('Name for the Log Analytics Extension')
+var extensionNameDependecyAgent = 'DependencyAgentExtension'
 
 @description('Virtual Machine Scale Set resource')
 resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
@@ -101,6 +115,36 @@ resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
                   }
                 }
               ]
+            }
+          }
+        ]
+      }
+      extensionProfile: {
+        extensions: [
+          {
+            name: extensionNameDependecyAgent
+            properties: {
+              publisher: 'Microsoft.Azure.Monitoring.DependencyAgent'
+              type: 'DependencyAgentLinux'
+              typeHandlerVersion: '9.5'
+              autoUpgradeMinorVersion: true
+              enableAutomaticUpgrade: true
+            }
+          }
+          {
+            name: extensionNameLogAnalytics
+            properties: {
+              publisher: 'Microsoft.EnterpriseCloud.Monitoring'
+              type: 'OmsAgentForLinux'
+              typeHandlerVersion: '1.4'
+              autoUpgradeMinorVersion: true
+              settings: {
+                workspaceId: laWorkspaceId
+                stopOnMultipleConnections: 'true'
+              }
+              protectedSettings: {
+                workspaceKey: laWorkspaceKey
+              }
             }
           }
         ]

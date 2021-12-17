@@ -39,6 +39,13 @@ param loadBalancerFrontendIp string = ''
 @description('The frontend IP for the internal loadbalancer if using a prexisting network.')
 param vnetId string = ''
 
+@description('Id of a preexisting Log Analytics Workspace')
+param laWorkspaceId string = ''
+
+@description('Resource ID of preexisting Log Analytics')
+param laWorkspaceResourceId string = ''
+
+@description('Variable to decide if preexisting network will be used')
 var deployVirtualNetworkVariable = ((!empty(dnsServerSubnetId)) ? false : true)
 
 @description('If subnet id is provieded take it. If not use the one created.')
@@ -58,6 +65,12 @@ var vnetIdVariable = ((!empty(vnetId)) ? vnetId : vnet.outputs.vnet)
 
 @description('Varaiable for NAT Gateway to resolve dependecy')
 var natGwVariable = ((deployVirtualNetworkVariable) ? natgw.outputs.natgw : '')
+
+@description('Variable for Workspace ID')
+var laWorkspaceIdVariable = ((!empty(laWorkspaceId)) ? laWorkspaceId : logAnalytics.outputs.laWorkspaceId)
+
+@description('Variable for Workspace Key')
+var laWorkspaceResourceIdVariable = ((!empty(laWorkspaceResourceId)) ? laWorkspaceResourceId : logAnalytics.outputs.laWorkspaceResourceId)
 
 @description('')
 resource dnsrg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -99,6 +112,8 @@ module dnsvmss 'dnsvmss.bicep' = {
     adminPasswordOrKey: publicKey
     subnetId: dnsServerSubnetIdVariable
     lbBackendId: loadbalancer.outputs.lbBackend
+    laWorkspaceId: laWorkspaceIdVariable
+    laWorkspaceResourceId: laWorkspaceResourceIdVariable
   }
 }
 
@@ -138,4 +153,10 @@ module storage 'storageaccount.bicep' = if (deployStorageAccount) {
   params: {
     subnetId: resolverSubnetIdVariable
   }
+}
+
+@description('Log Analytics module to enable VM Insights in VMSS')
+module logAnalytics 'loganalytics.bicep' = {
+  scope: dnsrg
+  name: 'LogAnalyticsDeployment'
 }
