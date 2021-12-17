@@ -55,5 +55,5 @@ resource syslog 'Microsoft.OperationalInsights/workspaces/dataSources@2020-08-01
 @description('Log Analytics Workspace ID')
 output laWorkspaceId string =  loganalytics.properties.customerId
 
-@description('Log Analytics Key')
-output laWorkspaceKey string = listKeys(loganalytics.id,'2020-08-01').primarySharedKey
+@description('Resource ID of the workspace to get the key in other modules')
+output laWorkspaceResourceId string = loganalytics.id

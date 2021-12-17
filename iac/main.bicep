@@ -42,9 +42,8 @@ param vnetId string = ''
 @description('Id of a preexisting Log Analytics Workspace')
 param laWorkspaceId string = ''
 
-@description('Key to be used with a preexisting Log Analytics Workspace')
-@secure()
-param laWorkspaceKey string = ''
+@description('Resource ID of preexisting Log Analytics')
+param laWorkspaceResourceId string = ''
 
 @description('Variable to decide if preexisting network will be used')
 var deployVirtualNetworkVariable = ((!empty(dnsServerSubnetId)) ? false : true)
@@ -71,7 +70,7 @@ var natGwVariable = ((deployVirtualNetworkVariable) ? natgw.outputs.natgw : '')
 var laWorkspaceIdVariable = ((!empty(laWorkspaceId)) ? laWorkspaceId : logAnalytics.outputs.laWorkspaceId)
 
 @description('Variable for Workspace Key')
-var laWorkspaceKeyVariable = ((!empty(laWorkspaceKey)) ? laWorkspaceKey : logAnalytics.outputs.laWorkspaceKey)
+var laWorkspaceResourceIdVariable = ((!empty(laWorkspaceResourceId)) ? laWorkspaceResourceId : logAnalytics.outputs.laWorkspaceResourceId)
 
 @description('')
 resource dnsrg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -114,7 +113,7 @@ module dnsvmss 'dnsvmss.bicep' = {
     subnetId: dnsServerSubnetIdVariable
     lbBackendId: loadbalancer.outputs.lbBackend
     laWorkspaceId: laWorkspaceIdVariable
-    laWorkspaceKey: laWorkspaceKeyVariable
+    laWorkspaceResourceId: laWorkspaceResourceIdVariable
   }
 }
 

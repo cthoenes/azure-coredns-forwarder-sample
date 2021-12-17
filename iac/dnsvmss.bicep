@@ -27,12 +27,13 @@ param authenticationType string = 'sshPublicKey'
 @secure()
 param adminPasswordOrKey string
 
+param laWorkspaceResourceId string
+
 @description('Log Analytice Workspace ID')
 param laWorkspaceId string
 
-@description('Log Analytics Workspace Key')
-@secure()
-param laWorkspaceKey string
+@description('Get Key for LogAnalytics Workspace')
+var laWorkspaceKey = listKeys(laWorkspaceResourceId,'2020-08-01').primarySharedKey
 
 @description('Name for the Network Interface')
 var nicname = 'nic-${vmssName}'
