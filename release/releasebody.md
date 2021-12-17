@@ -5,3 +5,5 @@ This release contains a [coredns](https://coredns.io/) binary including these pl
 - health [Link](https://coredns.io/plugins/health/)
 - log [Link](https://coredns.io/plugins/log/)
 - forward [Link](https://coredns.io/plugins/forward/)
+
+The main.json is a ARM Template build from the Bicep sources. This will help in deploying from the Portal.
