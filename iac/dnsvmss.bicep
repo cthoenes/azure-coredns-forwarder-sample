@@ -74,6 +74,11 @@ resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
     upgradePolicy: {
       mode: 'Automatic'
     }
+    scaleInPolicy: {
+      rules: [
+        'OldestVM'
+      ]
+    }
     virtualMachineProfile: {
       storageProfile: {
         osDisk: {
