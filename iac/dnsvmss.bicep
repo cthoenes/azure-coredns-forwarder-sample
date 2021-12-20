@@ -162,3 +162,64 @@ resource dnsvmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
     '3'
   ]
 }
+
+@description('Set Autoscale to increase to 6 Instances and reduce to 3 deleting oldest VMs')
+resource autoscale 'Microsoft.Insights/autoscalesettings@2021-05-01-preview' = {
+  name: 'TimeAutoscale'
+  location: location
+  properties: {
+    name: 'TimeAutoscale'
+    targetResourceUri: dnsvmss.id
+    enabled: true
+    profiles: [
+      {
+        name: 'Autoscale to Update VMs'
+        rules: []
+        capacity: {
+          maximum: '6'
+          default: '6'
+          minimum: '6'
+        }
+        recurrence: {
+          frequency: 'Week'
+          schedule: {
+            days: [
+              'Sunday'
+            ]
+            hours: [
+              9
+            ]
+            minutes: [
+              0
+            ]
+            timeZone: 'W. Europe Standard Time'
+          }
+        }
+      }
+      {
+        name: 'Default 3 Instances'
+        rules: []
+        capacity: {
+          default: '3'
+          maximum: '3'
+          minimum: '3'
+        }
+        recurrence: {
+          frequency: 'Week'
+          schedule: {
+            days: [
+              'Sunday'
+            ]
+            hours: [
+              12
+            ]
+            minutes: [
+              0
+            ]
+            timeZone: 'W. Europe Standard Time'
+          }
+        }
+      }
+    ]
+  }
+}
