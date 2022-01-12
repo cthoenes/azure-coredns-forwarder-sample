@@ -3,7 +3,7 @@
 param (
     [Parameter()]
     [string]
-    $MasterServer = "10.0.0.200"
+    $MasterServer
 )
 
 Install-WindowsFeature -Name DNS -IncludeManagementTools
