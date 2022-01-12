@@ -27,7 +27,7 @@ var location = resourceGroup().location
 var osDiskType = 'Standard_LRS'
 
 @description('Uri to the Powershell script')
-param virtualMachineExtensionCustomScriptUri string = 'https://raw.githubusercontent.com/Azure/bicep/main/docs/examples/201/vm-windows-with-custom-script-extension/install.ps1'
+param virtualMachineExtensionCustomScriptUri string = 'https://raw.githubusercontent.com/cthoenes/azure-coredns-forwarder-sample/main/iac/InstallandSetupDNS.ps1'
 
 
 @description('Forwarder VMs NIC')
@@ -87,7 +87,7 @@ resource forwardervm 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   }
 }
 
-// Virtual Machine Extensions - Custom Script
+@description('Config for Custom script extension')
 var virtualMachineExtensionCustomScript = {
   name: '${forwardervm.name}/config-app'
   location: location
@@ -97,6 +97,7 @@ var virtualMachineExtensionCustomScript = {
   commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File ./${last(split(virtualMachineExtensionCustomScriptUri, '/'))} -MasterServer ${masterServerIp}'
 }
 
+@description('Custom script extension to install and configure DNS Server')
 resource vmext 'Microsoft.Compute/virtualMachines/extensions@2020-06-01' = {
   name: virtualMachineExtensionCustomScript.name
   location: virtualMachineExtensionCustomScript.location
