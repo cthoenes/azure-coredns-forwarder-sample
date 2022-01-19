@@ -7,7 +7,7 @@ This repository can be used to deploy a sample of a special highly available DNS
 > Private networks already using the private DNS zone for a given type, can only connect to public resources if they don't have any private endpoint connections, otherwise a corresponding DNS configuration is required on the private DNS zone in order to complete the DNS resolution sequence. 
 
 ## Deployment
-There are two options to deploy this sample.
+There are three options to deploy this sample.
 
 ### Option 1 - Use Azure CLI
 You can deploy the sample using a Azure CLI deployment to your subscription
@@ -27,7 +27,12 @@ Afterwards, you can use AZ CLI to deploy it to your Azure subscription. Make sur
 az deployment sub create --location <yourPreferredLocation> --template-file ./iac/main.bicep --parameters @yourFile.parameters.json
 ```
 
-### Option 2 - Use main.json from release to create custom deployment in the Azure Portal
+### Option 2 - Use this deploy to Azure Botton
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2Fcthoenes%2F35178b0eb92b82fb4b1f6c92b4169b65%2Fraw%2Fmain.json)
+
+
+### Option 3 - Use main.json from release to create custom deployment in the Azure Portal
 
 You can use the main.json in the current release to create a custom deployment from the Azure Portal as outlined in:
 [https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template)

@@ -48,11 +48,28 @@ jobs:
 
       # Build ARM Template to be used with a Deploy to Azure Button
       - name: Build Bicep
-        run: bicep build ./iac/main.bicep     
+        run: bicep build ./iac/main.bicep
+
+      # Deploy the builded ARM Template to a gist to be used with a Deploy to Azure Button
+      - name: Deploy to Gist
+      # You may pin to the exact commit or the version.
+      # uses: exuanbo/actions-deploy-gist@6be0ad959b871b3ec20fa0c9536738dface8bd90
+        uses: exuanbo/actions-deploy-gist@v1.1.2
+        with:
+          # Set personal access token for updating gist.
+          token: ${{secrets.GISTTOKEN}}
+          # Set id of the gist to be updated.
+          gist_id: 35178b0eb92b82fb4b1f6c92b4169b65
+          # Set description of the gist.
+          gist_description: 'ARM Template to be used in Deploy to Azure Button'
+          # Set file name in the gist.
+          gist_file_name: main.json 
+          # Set path of the file to be deployed.
+          file_path: ./iac/main.json
 
       - name: Create Release
-  # You may pin to the exact commit or the version.
-  # uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01
+        # You may pin to the exact commit or the version.
+        # uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01
         uses: ncipollo/release-action@v1.9.0
         with:
           # An optional flag which indicates if we should update a release if it already exists. Defaults to false.
