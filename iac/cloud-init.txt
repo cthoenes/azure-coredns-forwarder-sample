@@ -44,7 +44,7 @@ write_files:
         .:53 {
             ready
             forward . 168.63.129.16
-            alternate NXDOMAIN . 1.1.1.1
+            alternate NXDOMAIN . 1.1.1.1 8.8.8.8
             log
         }
 runcmd:
