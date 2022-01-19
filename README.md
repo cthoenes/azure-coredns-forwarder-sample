@@ -44,6 +44,7 @@ If you deploy this sample you will get multiple resources:
 - a Virtual Machine Scale Set to host the DNS Servers
 - an internal Load Balancer to distribute DNS traffic to the corresponding hosts in the Virtual Machine Scale Set
 - a NAT Gateway for the DNS Servers to be able to connect to the Internet
+- a Windows Server with DNS installed to be used as Forwarder example
 - a Virtual Machine in a different subnet to be able to test the configuration
 - a private DNS Zone linked to the virtual network
 - a storage Account with the blob sub-resource being private endpoint enabled but **NOT** integrated in the private DNS Zone
@@ -101,7 +102,26 @@ Address: <PublicIP>
 ````
 - The public DNS Server points to the Public IP address as expected.
 
-6. As a last Test use the newly created Virtual Machine Scale Set running `coredns`. Therefore set the server to 10.0.0.200 (Loadbalancer IP) and resolve the endpoint again:
+6. Now using the Forwarder that hast a conditional forwarder pointing at the coredns server
+
+```shell
+> server 10.0.0.150
+Default server: 10.0.0.150
+Address: 10.0.0.150#53
+> storageaccount.blob.core.windows.net
+Server:10.0.0.150
+Address:10.0.0.150#53
+
+Non-authoritative answer:
+storageaccount.blob.core.windows.netcanonical name = storageaccount.privatelink.blob.core.windows.net.
+storageaccount.privatelink.blob.core.windows.netcanonical name = blob.<publicname>.store.core.windows.net.
+Name:blob.<publicname>.store.core.windows.net
+Address: <PublicIP>
+```
+
+The result shows that through the forwarder the public ip is returned directly.
+
+7. As a last Test use the newly created Virtual Machine Scale Set running `coredns`. Therefore set the server to 10.0.0.200 (Loadbalancer IP) and resolve the endpoint again:
 ```shell
 > server 10.0.0.200
 Default server: 10.0.0.200

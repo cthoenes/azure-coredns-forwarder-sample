@@ -9,6 +9,10 @@ param location string
 @description('Adminusername for all VMs')
 param adminUser string = 'azureuser'
 
+@description('Admin Password for Windows Resolver')
+@secure()
+param adminPassword string
+
 @description('Your public key to access the vms. If you dont have a key currently please review: https://docs.microsoft.com/en-us/azure/virtual-machines/linux/create-ssh-keys-detailed')
 param publicKey string 
 
@@ -159,4 +163,16 @@ module storage 'storageaccount.bicep' = if (deployStorageAccount) {
 module logAnalytics 'loganalytics.bicep' = {
   scope: dnsrg
   name: 'LogAnalyticsDeployment'
+}
+
+@description('Windows Server forwarder that would be preexisting in the hub')
+module forwarder 'forwarder.bicep' = {
+  scope: dnsrg
+  name: 'DNSForwarderDeployment'
+  params: {
+    subnetId: dnsServerSubnetIdVariable
+    adminUser: adminUser
+    adminPasswordOrKey: adminPassword
+    masterServerIp: loadBalancerFrontendIpVariable
+  }
 }

@@ -23,6 +23,9 @@
       "deployPrivateZone": {
         "value": true
       },
+      "adminPassword": {
+        "value": "<yourAdminPassword>"
+      },
       "deployStorageAccount": {
         "value": true
       }
