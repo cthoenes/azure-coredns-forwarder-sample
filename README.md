@@ -1,5 +1,9 @@
 # Azure DNS Resolver Sample
 
+> [!CAUTION]
+> This repository is archived and no longer maintained. Its no longer required due to: https://learn.microsoft.com/en-us/azure/dns/private-dns-fallback
+
+
 This sample is still work in progress. Expect significant changes.
 
 ## TL,DR
